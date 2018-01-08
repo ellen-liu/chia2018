@@ -1,0 +1,34 @@
+```{r __0.__ Setting up your workspace}
+```
+
+```{r clear your workspace} 
+rm(list=ls()) # clear the workspace of all data objects
+ls() # list number of data objects in the workspace
+```
+
+```{r setwd & load data}
+# reset the working directory to the folder with YOUR data
+setwd("~/Desktop/chia2018/2017/")
+
+# load the data as an object such as "d"
+d <- read.csv('enrollment_premiums/enrollment_by_employer_size.csv', head = T)
+dim(d) # tells you number of rows and columns
+```
+
+```{r load packages}
+# you'll need to use the library() command to load any packages that you'll use in your R session.
+library(Hmisc)   # for describing variables 
+library(ggplot2) # for plotting
+library(car)     # for anovas
+```
+If a package doesn't load from the library command it's likely not been installed yet. Go to your tool bar at the top of your screen and install the package with the same name.
+
+  If a variable is a factor, it can be labelled above with its question content, but it's levels need to be labeled as well using syntax below. You can also view the excel file 00.1_Labelling helper.xlsx to expedite this process. 
+  
+```{r labelling variables and their levels}
+d$Funding.Type <- factor(d$Funding.Type, labels = c("Fully-Insured"))
+levels(d$Funding.Type)
+
+d$Employer.Size <- factor(d$Employer.Size, labels = c("GIC", "Individual", "Jumbo Group", "Large Group", "Mid-Size Group", "Total", "Small Group"))
+levels(d$Employer.Size)
+```
