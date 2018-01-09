@@ -3,6 +3,6 @@ This project is part of a short-term internship (January 8 - 19, 2018) done at t
 
 ### Tasks
 * Reproduce Premium Per Member Per Month 
-    + By **Employer Size**
-    + By **Product Type**
-    + By **Payer**
+    * [ ] By **Employer Size**
+    * [ ] By **Product Type**
+    * [ ] By **Payer**
