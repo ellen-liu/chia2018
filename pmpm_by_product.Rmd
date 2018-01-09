@@ -1,0 +1,60 @@
+```{r __0.__ Setting up your workspace}
+```
+
+```{r clear your workspace} 
+rm(list=ls()) # clear the workspace of all data objects
+ls() # list number of data objects in the workspace
+```
+
+
+```{r load packages}
+# you'll need to use the library() command to load any packages that you'll use in your R session.
+# library(Hmisc)   # for describing variables 
+library(ggplot2) # for plotting
+library(car)     # for anovas
+library(readr)
+library(RColorBrewer) 
+```
+If a package doesn't load from the library command it's likely not been installed yet. Go to your tool bar at the top of your screen and install the package with the same name.
+
+  If a variable is a factor, it can be labelled above with its question content, but it's levels need to be labeled as well using syntax below. You can also view the excel file 00.1_Labelling helper.xlsx to expedite this process.
+  
+```{r setwd & load data}
+# reset the working directory to the folder with YOUR data
+setwd("~/Desktop/chia2018/2017/")
+
+# load the data as an object such as "d"
+enroll_df <- read.csv('enrollment_premiums/enrollment_by_product.csv', head = T)
+keep_vars <- c("months_2014", "months_2015", "months_2016")
+dim(enroll_df) # tells you number of rows and columns
+enroll_df <- enroll_df[keep_vars]
+enroll_df$months_2014 <- parse_number(enroll_df$months_2014)
+enroll_df$months_2015 <- parse_number(enroll_df$months_2015)
+enroll_df$months_2016 <- parse_number(enroll_df$months_2016)
+
+premium_df <- read.csv('enrollment_premiums/premiums_by_product.csv', head = T)
+keep_vars <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
+premium_df <- premium_df[keep_vars]
+premium_df$agg_premiums_2014 <-parse_number(premium_df$agg_premiums_2014)
+premium_df$agg_premiums_2015 <-parse_number(premium_df$agg_premiums_2015)
+premium_df$agg_premiums_2016 <-parse_number(premium_df$agg_premiums_2016)
+```
+
+```{r create final dataframe}
+product_type = c('HMO','Other','POS','PPO','Total')
+pmpm_2014 = c(0,0,0,0,0)
+pmpm_2015 = c(0,0,0,0,0)
+pmpm_2016 = c(0,0,0,0,0)
+pmpm_df <- data.frame(product_type, pmpm_2014, pmpm_2015, pmpm_2016)
+pmpm_df$pmpm_2014 <- premium_df$agg_premiums_2014 / enroll_df$months_2014
+pmpm_df$pmpm_2015 <- premium_df$agg_premiums_2015 / enroll_df$months_2015
+pmpm_df$pmpm_2016 <- premium_df$agg_premiums_2016 / enroll_df$months_2016
+pmpm_df
+```
+
+```{r create plot}
+pmpm_2016_plot <- ggplot(data = pmpm_df, aes(employer_size,pmpm_2016)) + geom_bar(stat = "identity", width=0.3, fill="steelblue") + coord_flip() + theme_minimal() + labs(title =" Fully-Insured Premiums by Product Type, 2016", x = "ESI") 
+pmpm_2016_plot
+
+```
+
