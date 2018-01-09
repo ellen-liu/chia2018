@@ -13,6 +13,7 @@ ls() # list number of data objects in the workspace
 library(ggplot2) # for plotting
 library(car)     # for anovas
 library(readr)
+library(RColorBrewer) 
 ```
 If a package doesn't load from the library command it's likely not been installed yet. Go to your tool bar at the top of your screen and install the package with the same name.
 
@@ -50,3 +51,10 @@ pmpm_df$pmpm_2015 <- premium_df$agg_premiums_2015 / enroll_df$months_2015
 pmpm_df$pmpm_2016 <- premium_df$agg_premiums_2016 / enroll_df$months_2016
 pmpm_df
 ```
+
+```{r create plot}
+pmpm_2016_plot <- ggplot(data = pmpm_df, aes(employer_size,pmpm_2016)) + geom_bar(stat = "identity", width=0.3, fill="steelblue") + coord_flip() + theme_minimal() + labs(title =" Fully-Insured Premiums by Employer Size, 2016", x = "ESI") 
+pmpm_2016_plot
+
+```
+
