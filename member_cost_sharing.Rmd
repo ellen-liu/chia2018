@@ -1,0 +1,54 @@
+```{r __0.__ Setting up your workspace}
+```
+
+```{r clear your workspace} 
+rm(list=ls()) # clear the workspace of all data objects
+ls() # list number of data objects in the workspace
+```
+
+
+```{r load packages}
+# you'll need to use the library() command to load any packages that you'll use in your R session.
+# library(Hmisc)   # for describing variables 
+library(ggplot2) # for plotting
+library(car)     # for anovas
+library(readr)
+library(RColorBrewer) 
+```
+
+
+```{r setwd & load data}
+# reset the working directory to the folder with YOUR data
+setwd("~/Desktop/chia2018/2017/")
+
+# load the data as an object such as "d"
+df <- read.csv('datasheets/member_cost_sharing.csv', head = T)
+df$allowed_2014 <- parse_number(df$allowed_2014)
+df$allowed_2015 <- parse_number(df$allowed_2015)
+df$allowed_2016 <- parse_number(df$allowed_2016)
+
+df$incurred_2014 <- parse_number(df$incurred_2014)
+df$incurred_2015 <- parse_number(df$incurred_2015)
+df$incurred_2016 <- parse_number(df$incurred_2016)
+```
+
+```{r create final dataframe}
+funding_type = c('Fully-Insured','Fully-Insured','Fully-Insured','Fully-Insured','Fully-Insured','Fully-Insured','Fully-Insured','Self-Insured','Self-Insured','Self-Insured','Self-Insured','Self-Insured','Self-Insured','Self-Insured','Total','Total','Total','Total','Total','Total','Total')
+employer_size = c('Individual','Small Group', 'Mid-Size Group', 'Large Group', 'Jumbo Group', 'GIC', 'Total')
+cost_sharing_2014 = c(0,0,0)
+cost_sharing_2015 = c(0,0,0)
+cost_sharing_2016 = c(0,0,0)
+cost_sharing <- data.frame(funding_type, employer_size, cost_sharing_2014, cost_sharing_2015, cost_sharing_2016)
+cost_sharing$cost_sharing_2014 <- df$allowed_2014 - df$incurred_2014
+cost_sharing$cost_sharing_2015 <- df$allowed_2015 - df$incurred_2015
+cost_sharing$cost_sharing_2016 <- df$allowed_2016 - df$incurred_2016
+
+cost_sharing
+```
+
+```{r create plot}
+pmpm_2016_plot <- ggplot(data = pmpm_df, aes(employer_size,pmpm_2016)) + geom_bar(stat = "identity", width=0.3, fill="steelblue") + coord_flip() + theme_minimal() + labs(title =" Fully-Insured Premiums by Product Type, 2016", x = "ESI") 
+pmpm_2016_plot
+
+```
+
