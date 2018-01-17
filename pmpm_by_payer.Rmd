@@ -24,7 +24,7 @@ If a package doesn't load from the library command it's likely not been installe
 setwd("~/Desktop/chia2018/2017/")
 
 # load the data as an object such as "d"
-enroll_df <- read.csv('enrollment_premiums/enrollment_by_payer.csv', head = T)
+enroll_df <- read.csv('datasheets/enrollment_by_payer.csv', head = T)
 keep_vars <- c("months_2014", "months_2015", "months_2016")
 dim(enroll_df) # tells you number of rows and columns
 enroll_df <- enroll_df[keep_vars]
@@ -32,7 +32,7 @@ enroll_df$months_2014 <- parse_number(enroll_df$months_2014)
 enroll_df$months_2015 <- parse_number(enroll_df$months_2015)
 enroll_df$months_2016 <- parse_number(enroll_df$months_2016)
 
-premium_df <- read.csv('enrollment_premiums/premiums_by_payer.csv', head = T)
+premium_df <- read.csv('datasheets/premiums_by_payer.csv', head = T)
 keep_vars <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
 premium_df <- premium_df[keep_vars]
 premium_df$agg_premiums_2014 <-parse_number(premium_df$agg_premiums_2014)
