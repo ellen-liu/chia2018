@@ -26,6 +26,7 @@ setwd("~/Desktop/chia2018/2017/")
 # load the data as an object such as "d"
 enroll_df <- read.csv('datasheets/enrollment_by_payer.csv', head = T)
 keep_vars <- c("months_2014", "months_2015", "months_2016")
+enroll_df
 dim(enroll_df) # tells you number of rows and columns
 enroll_df <- enroll_df[keep_vars]
 enroll_df$months_2014 <- parse_number(enroll_df$months_2014)
@@ -35,13 +36,14 @@ enroll_df$months_2016 <- parse_number(enroll_df$months_2016)
 premium_df <- read.csv('datasheets/premiums_by_payer.csv', head = T)
 keep_vars <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
 premium_df <- premium_df[keep_vars]
+premium_df
 premium_df$agg_premiums_2014 <-parse_number(premium_df$agg_premiums_2014)
 premium_df$agg_premiums_2015 <-parse_number(premium_df$agg_premiums_2015)
 premium_df$agg_premiums_2016 <-parse_number(premium_df$agg_premiums_2016)
 ```
 
 ```{r create final dataframe}
-payer = c('Aetna', 'BCBSMA', 'Cigna', 'Fallon', 'HPHC', 'HNE', 'NHP', 'Total','Tufts', 'UniCare', 'United Healthcare')
+payer = c('Aetna', 'BCBSMA', 'Cigna', 'Fallon', 'HPHC', 'HNE', 'NHP', 'Tufts','UniCare', 'United', 'Total')
 pmpm_2014 = c(0,0,0,0,0,0,0,0,0,0,0)
 pmpm_2015 = c(0,0,0,0,0,0,0,0,0,0,0)
 pmpm_2016 = c(0,0,0,0,0,0,0,0,0,0,0)
