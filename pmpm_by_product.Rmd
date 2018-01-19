@@ -1,6 +1,3 @@
-```{r __0.__ Setting up your workspace}
-```
-
 ```{r clear your workspace} 
 rm(list=ls()) # clear the workspace of all data objects
 ls() # list number of data objects in the workspace
@@ -9,7 +6,6 @@ ls() # list number of data objects in the workspace
 
 ```{r load packages}
 # you'll need to use the library() command to load any packages that you'll use in your R session.
-# library(Hmisc)   # for describing variables 
 library(ggplot2) # for plotting
 library(car)     # for anovas
 library(readr)
@@ -20,24 +16,31 @@ If a package doesn't load from the library command it's likely not been installe
   If a variable is a factor, it can be labelled above with its question content, but it's levels need to be labeled as well using syntax below. You can also view the excel file 00.1_Labelling helper.xlsx to expedite this process.
   
 ```{r setwd & load data}
+options(digits = 12)
 # reset the working directory to the folder with YOUR data
 setwd("~/Desktop/chia2018/2017/")
 
 # load the data as an object such as "d"
 enroll_df <- read.csv('datasheets/enrollment_by_product.csv', head = T)
-keep_vars <- c("months_2014", "months_2015", "months_2016")
-dim(enroll_df) # tells you number of rows and columns
-enroll_df <- enroll_df[keep_vars]
-enroll_df$months_2014 <- parse_number(enroll_df$months_2014)
-enroll_df$months_2015 <- parse_number(enroll_df$months_2015)
-enroll_df$months_2016 <- parse_number(enroll_df$months_2016)
+month_columns <- c("months_2014", "months_2015", "months_2016")
+
+enroll_df <- enroll_df[month_columns]
+enroll_df$months_2014 <- as.numeric(enroll_df$months_2014)
+enroll_df$months_2015 <- as.numeric(enroll_df$months_2015)
+enroll_df$months_2016 <- as.numeric(enroll_df$months_2016)
 
 premium_df <- read.csv('datasheets/premiums_by_product.csv', head = T)
-keep_vars <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
-premium_df <- premium_df[keep_vars]
-premium_df$agg_premiums_2014 <-parse_number(premium_df$agg_premiums_2014)
-premium_df$agg_premiums_2015 <-parse_number(premium_df$agg_premiums_2015)
-premium_df$agg_premiums_2016 <-parse_number(premium_df$agg_premiums_2016)
+agg_columns <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
+premium_df <- premium_df[agg_columns]
+
+premium_df$agg_premiums_2014 <-gsub('\\$|,', '', premium_df$agg_premiums_2014)
+premium_df$agg_premiums_2015 <-gsub('\\$|,', '', premium_df$agg_premiums_2015)
+premium_df$agg_premiums_2016 <-gsub('\\$|,', '', premium_df$agg_premiums_2016)
+
+premium_df$agg_premiums_2014 <-as.numeric(premium_df$agg_premiums_2014)
+premium_df$agg_premiums_2015 <-as.numeric(premium_df$agg_premiums_2015)
+premium_df$agg_premiums_2016 <-as.numeric(premium_df$agg_premiums_2016)
+premium_df
 ```
 
 ```{r create final dataframe}

@@ -37,9 +37,14 @@ premium_df <- read.csv('datasheets/premiums_by_payer.csv', head = T)
 keep_vars <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
 premium_df <- premium_df[keep_vars]
 premium_df
-premium_df$agg_premiums_2014 <-parse_number(premium_df$agg_premiums_2014)
-premium_df$agg_premiums_2015 <-parse_number(premium_df$agg_premiums_2015)
-premium_df$agg_premiums_2016 <-parse_number(premium_df$agg_premiums_2016)
+
+premium_df$agg_premiums_2014 <-gsub('\\$|,', '', premium_df$agg_premiums_2014)
+premium_df$agg_premiums_2015 <-gsub('\\$|,', '', premium_df$agg_premiums_2015)
+premium_df$agg_premiums_2016 <-gsub('\\$|,', '', premium_df$agg_premiums_2016)
+
+premium_df$agg_premiums_2014 <-as.numeric(premium_df$agg_premiums_2014)
+premium_df$agg_premiums_2015 <-as.numeric(premium_df$agg_premiums_2015)
+premium_df$agg_premiums_2016 <-as.numeric(premium_df$agg_premiums_2016)
 ```
 
 ```{r create final dataframe}

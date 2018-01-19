@@ -20,36 +20,57 @@ If a package doesn't load from the library command it's likely not been installe
   If a variable is a factor, it can be labelled above with its question content, but it's levels need to be labeled as well using syntax below. You can also view the excel file 00.1_Labelling helper.xlsx to expedite this process.
   
 ```{r setwd & load data}
+options(digits=12)
 # reset the working directory to the folder with YOUR data
 setwd("~/Desktop/chia2018/2017/")
 
 # load the data as an object such as "d"
 enroll_df <- read.csv('datasheets/enrollment_by_employer_size.csv', head = T)
-keep_vars <- c("months_2014", "months_2015", "months_2016")
-dim(enroll_df) # tells you number of rows and columns
-enroll_df <- enroll_df[keep_vars]
-enroll_df$months_2014 <- parse_number(enroll_df$months_2014)
-enroll_df$months_2015 <- parse_number(enroll_df$months_2015)
-enroll_df$months_2016 <- parse_number(enroll_df$months_2016)
+
+# Only keep the columns with total member months
+month_columns <- c("months_2014", "months_2015", "months_2016")
+enroll_df <- enroll_df[month_columns]
+
+
+# Treat as type number
+enroll_df$months_2014 <- as.numeric(enroll_df$months_2014)
+enroll_df$months_2015 <- as.numeric(enroll_df$months_2015)
+enroll_df$months_2016 <- as.numeric(enroll_df$months_2016)
+
+enroll_df
 
 premium_df <- read.csv('datasheets/premiums_by_employer_size.csv', head = T)
-keep_vars <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
-premium_df <- premium_df[keep_vars]
-premium_df$agg_premiums_2014 <-parse_number(premium_df$agg_premiums_2014)
-premium_df$agg_premiums_2015 <-parse_number(premium_df$agg_premiums_2015)
-premium_df$agg_premiums_2016 <-parse_number(premium_df$agg_premiums_2016)
+agg_columns <- c("agg_premiums_2014","agg_premiums_2015","agg_premiums_2016")
+premium_df <- premium_df[agg_columns]
+premium_df
+
+premium_df$agg_premiums_2014 <-gsub('\\$|,', '', premium_df$agg_premiums_2014)
+premium_df$agg_premiums_2015 <-gsub('\\$|,', '', premium_df$agg_premiums_2015)
+premium_df$agg_premiums_2016 <-gsub('\\$|,', '', premium_df$agg_premiums_2016)
+
+premium_df$agg_premiums_2014 <- as.numeric(premium_df$agg_premiums_2014)
+premium_df$agg_premiums_2015 <- as.numeric(premium_df$agg_premiums_2015)
+premium_df$agg_premiums_2016 <- as.numeric(premium_df$agg_premiums_2016)
+
+premium_df
 ```
 
 ```{r create final dataframe}
-employer_size = c('Individual','Small Group', 'Mid-Size Group', 'Large Group', 'Jumbo Group', 'GIC', 'Total')
+
+employer_sizes = c('Individual','Small Group', 'Mid-Size Group', 'Large Group', 'Jumbo Group', 'GIC', 'Total')
 pmpm_2014 = c(0,0,0,0,0,0,0)
 pmpm_2015 = c(0,0,0,0,0,0,0)
 pmpm_2016 = c(0,0,0,0,0,0,0)
-pmpm_df <- data.frame(employer_size, pmpm_2014, pmpm_2015, pmpm_2016)
+
+pmpm_df <- data.frame(employer_sizes, pmpm_2014, pmpm_2015, pmpm_2016)
+
 pmpm_df$pmpm_2014 <- premium_df$agg_premiums_2014 / enroll_df$months_2014
 pmpm_df$pmpm_2015 <- premium_df$agg_premiums_2015 / enroll_df$months_2015
 pmpm_df$pmpm_2016 <- premium_df$agg_premiums_2016 / enroll_df$months_2016
+
 pmpm_df
+
+
 ```
 
 ```{r create plot}
